@@ -113,6 +113,39 @@ void  SGP30_Init(void)
 	
 }
 
+void SGP30_Write(u8 a, u8 b)
+{
+  IIC_Start();
+  IIC_SendByte(SGP30_write); //发送器件地址+写指令
+  IIC_Wait_Ask();
+  IIC_SendByte(a);		//发送控制字节
+  IIC_Wait_Ask();
+  IIC_SendByte(b);
+  IIC_Wait_Ask();
+  IIC_Stop();
+  HAL_Delay(100);
+}
+
+u32 SGP30_Read(void)
+{
+  u32 dat;
+  u8 crc;
+  IIC_Start();
+  IIC_SendByte(SGP30_read); //发送器件地址+读指令
+  IIC_Wait_Ask();
+  dat = IIC_Recv_Byte(1);
+  dat <<= 8;
+  dat += IIC_Recv_Byte(1);
+  crc = IIC_Recv_Byte(1); //crc数据，舍去
+  crc = crc;  //为了不让出现编译警告
+  dat <<= 8;
+  dat += IIC_Recv_Byte(1);
+  dat <<= 8;
+  dat += IIC_Recv_Byte(0);
+  IIC_Stop();
+  return(dat);
+}
+
 
 
 

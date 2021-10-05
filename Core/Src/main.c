@@ -67,6 +67,9 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+	u32 sgp30_dat;
+	u32 CO2Data=400,TVOCData=0;//定义CO2浓度变量与TVOC浓度变量
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,7 +98,17 @@ int main(void)
 	{
 		Error_Handler();
 	}	
-	SGP30_Init();
+	
+	SGP30_Init();   //初始化SGP30
+	while(CO2Data == 400 && TVOCData == 0)
+	{
+		SGP30_Write(0x20,0x08);
+		sgp30_dat = SGP30_Read();//读取SGP30的值
+		CO2Data = (sgp30_dat & 0xffff0000) >> 16;//取出CO2浓度值
+		TVOCData = sgp30_dat & 0x0000ffff;			 //取出TVOC值
+		printf("正在检测中...\r\n");
+		HAL_Delay(500);
+	}
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -119,9 +132,14 @@ int main(void)
 			memset(usart1_buf.RxBuff,0,usart1_buf.RxSize);//清除接受BUFF里的数据			
 		}
 
-		HAL_Delay(500);			
-		printf("串口测试\r\n");
-			
+
+		SGP30_Write(0x20,0x08);
+		sgp30_dat = SGP30_Read();//读取SGP30的值
+		CO2Data = (sgp30_dat & 0xffff0000) >> 16;//取出CO2浓度值
+		TVOCData = sgp30_dat & 0x0000ffff;       //取出TVOC值
+		printf("\r\nCO2:%dppm\r\nTVOC:%dppd\r\n",CO2Data,TVOCData);
+		HAL_Delay(200);
+		
   }
   /* USER CODE END 3 */
 }

@@ -35,4 +35,5 @@ airdetection/sgp30.o: ..\Core\Src\SGP30.c ..\Core\Inc\SGP30.h \
   ..\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal_uart_ex.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h ..\Core\Inc\delay.h \
-  ..\Core\Inc\tim.h ..\Core\Inc\gpio.h ..\Core\Inc\usart.h
+  ..\Core\Inc\tim.h ..\Core\Inc\gpio.h ..\Core\Inc\usart.h \
+  ..\Core\Inc\IIC.h

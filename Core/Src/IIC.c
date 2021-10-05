@@ -25,7 +25,7 @@ void IIC_Delay(void)
 	 	循环次数为5时，SCL频率 = 421KHz， SCL高电平时间1.25us，SCL低电平时间2.375us 
 	*/
 //	for (i = 0; i < 400; i++);
-	HAL_Delay_US(4);
+	HAL_Delay_US(2);
 //	HAL_Delay(1);
 }
 
@@ -250,5 +250,6 @@ u8 IIC_Recv_Byte(u8 ack)
         IIC_SendACK(); //发送ACK   
      return Dat;
 }
+
 
 

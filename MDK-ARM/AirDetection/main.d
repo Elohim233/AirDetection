@@ -36,4 +36,5 @@ airdetection/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h ..\Core\Inc\delay.h \
   ..\Core\Inc\main.h ..\Core\Inc\tim.h ..\Core\Inc\tim.h \
-  ..\Core\Inc\usart.h ..\Core\Inc\gpio.h
+  ..\Core\Inc\usart.h ..\Core\Inc\gpio.h ..\Core\Inc\SGP30.h \
+  ..\Core\Inc\gpio.h ..\Core\Inc\usart.h ..\Core\Inc\IIC.h
