@@ -251,5 +251,3 @@ u8 IIC_Recv_Byte(u8 ack)
      return Dat;
 }
 
-
-

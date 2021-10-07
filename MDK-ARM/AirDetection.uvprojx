@@ -339,7 +339,7 @@
               <MiscControls>-Wno-invalid-source-encoding</MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;   ../Drivers/STM32L4xx_HAL_Driver/Inc;   ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy;   ../Drivers/CMSIS/Device/ST/STM32L4xx/Include;   ../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;      ../Drivers/STM32L4xx_HAL_Driver/Inc;      ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy;      ../Drivers/CMSIS/Device/ST/STM32L4xx/Include;      ../Drivers/CMSIS/Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -399,6 +399,16 @@
               <FilePath>..\Core\Src\delay.c</FilePath>
             </File>
             <File>
+              <FileName>IIC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\IIC.c</FilePath>
+            </File>
+            <File>
+              <FileName>SGP30.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\SGP30.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
@@ -407,6 +417,11 @@
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Core/Src/dma.c</FilePath>
             </File>
             <File>
               <FileName>tim.c</FileName>
@@ -427,16 +442,6 @@
               <FileName>stm32l4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32l4xx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>IIC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\IIC.c</FilePath>
-            </File>
-            <File>
-              <FileName>SGP30.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\SGP30.c</FilePath>
             </File>
           </Files>
         </Group>

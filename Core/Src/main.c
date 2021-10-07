@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -45,7 +46,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
 USART_BuffTypeDef usart1_buf;
+USART_BuffTypeDef usart2_buf;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -70,6 +74,8 @@ int main(void)
 	u32 sgp30_dat;
 	u32 CO2Data=400,TVOCData=0;//定义CO2浓度变量与TVOC浓度变量
 
+//  uint8_t *SendBuf = "\r\n请输入数据，以回车键结束：\r\n";
+	
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -90,25 +96,40 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);		//使能IDLE中断
+
 	if(HAL_UART_Receive_IT(&huart1, &usart1_buf.aRxBuff, 1) != HAL_OK)
 	{
 		Error_Handler();
 	}	
 	
-	SGP30_Init();   //初始化SGP30
-	while(CO2Data == 400 && TVOCData == 0)
-	{
-		SGP30_Write(0x20,0x08);
-		sgp30_dat = SGP30_Read();//读取SGP30的值
-		CO2Data = (sgp30_dat & 0xffff0000) >> 16;//取出CO2浓度值
-		TVOCData = sgp30_dat & 0x0000ffff;			 //取出TVOC值
-		printf("正在检测中...\r\n");
-		HAL_Delay(500);
+  if(HAL_UART_Receive_DMA(&huart2, usart2_buf.RxBuff, USART_RX_LEN) != HAL_OK){
+		Error_Handler();
 	}
+	
+//  if(HAL_UART_Transmit_DMA(&huart2, SendBuf, sizeof(SendBuf)) != HAL_OK){
+//		Error_Handler();
+//	}
+		HAL_Delay(200);
+	
+printf("正在检测中...\r\n");
+		HAL_Delay(200);
+	
+//	SGP30_Init();   //初始化SGP30
+//	while(CO2Data == 400 && TVOCData == 0)
+//	{
+//		SGP30_Write(0x20,0x08);
+//		sgp30_dat = SGP30_Read();//读取SGP30的值
+//		CO2Data = (sgp30_dat & 0xffff0000) >> 16;//取出CO2浓度值
+//		TVOCData = sgp30_dat & 0x0000ffff;			 //取出TVOC值
+//		printf("正在检测中...\r\n");
+//		HAL_Delay(500);
+//	}
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -133,12 +154,30 @@ int main(void)
 		}
 
 
-		SGP30_Write(0x20,0x08);
-		sgp30_dat = SGP30_Read();//读取SGP30的值
-		CO2Data = (sgp30_dat & 0xffff0000) >> 16;//取出CO2浓度值
-		TVOCData = sgp30_dat & 0x0000ffff;       //取出TVOC值
-		printf("\r\nCO2:%dppm\r\nTVOC:%dppd\r\n",CO2Data,TVOCData);
-		HAL_Delay(200);
+//		SGP30_Write(0x20,0x08);
+//		sgp30_dat = SGP30_Read();//读取SGP30的值
+//		CO2Data = (sgp30_dat & 0xffff0000) >> 16;//取出CO2浓度值
+//		TVOCData = sgp30_dat & 0x0000ffff;       //取出TVOC值
+//		printf("\r\nCO2:%dppm\r\nTVOC:%dppd\r\n",CO2Data,TVOCData);
+//		HAL_Delay(200);
+		
+		
+		if(usart2_buf.Rx_end_flag == 1 && usart2_buf.RxSize != 0)
+		{
+			printf("\r\n\r\n接收到的字符个数为：%d\r\n接收到的数据为：\r\n",usart2_buf.RxSize);
+			usart2_buf.TxSize = usart2_buf.RxSize;
+			usart2_buf.Tx_end_flag = 0;
+
+			if(HAL_UART_Transmit_DMA(&huart2, usart2_buf.RxBuff, usart2_buf.RxSize) != HAL_OK)
+			{
+				Error_Handler();
+			}
+			usart2_buf.RxSize = 0;
+			usart2_buf.Rx_end_flag = 0;
+			memset(usart2_buf.RxBuff,0,usart2_buf.RxSize);
+		}
+
+
 		
   }
   /* USER CODE END 3 */
@@ -183,8 +222,9 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_USART2;
   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();

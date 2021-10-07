@@ -71,20 +71,22 @@ void Error_Handler(void);
 #define IIC_SDA_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
-#define USART1_TX_LEN		256
-#define USART1_RX_LEN		256
+#define USART_TX_LEN		256
+#define USART_RX_LEN		256
 
 typedef struct{
-	uint8_t			TxBuff[USART1_TX_LEN];
+	uint8_t			TxBuff[USART_TX_LEN];
 	uint16_t		TxSize;
 	uint8_t			Tx_end_flag;
-	uint8_t			RxBuff[USART1_RX_LEN];
-  	uint8_t			aRxBuff;
+	uint8_t			RxBuff[USART_RX_LEN];
+  uint8_t			aRxBuff;
 	uint16_t		RxSize;
 	uint8_t			Rx_end_flag;
 }USART_BuffTypeDef;
 
 extern USART_BuffTypeDef usart1_buf;
+extern USART_BuffTypeDef usart2_buf;
+
 
 /* USER CODE END Private defines */
 
